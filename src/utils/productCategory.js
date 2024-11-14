@@ -1,0 +1,1 @@
+export const productCategory = ['Makanan', 'Minuman', 'Alat Tulis', 'Alat Tulis'];
