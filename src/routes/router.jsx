@@ -1,33 +1,53 @@
 import {createBrowserRouter} from "react-router-dom";
 import LoginPage from "../pages/login/LoginPage.jsx";
-import Hook from "../pages/dashboard/hook/Hook.jsx";
+import Product from "../features/product/Product.jsx";
 import DashboardLayout from "../pages/dashboard/DashboardLayout.jsx";
 import Dashboard from "../pages/dashboard/Dashboard.jsx";
+import Page404 from "../pages/404/Page404.jsx";
+import Page500 from "../pages/500/Page500.jsx";
+import App from "../App.jsx";
 
 const router = createBrowserRouter([
     {
-        path: "*",
-        element: <h1>404</h1>,
+        path: '*',
+        element: <Page404/>,
     },
     {
-        path: "/dashboard",
-        element: <DashboardLayout/>,
-        errorElement: <h1>500</h1>,
+        path: '',
+        element: <App/>,
         children: [
             {
-                index: true,
-                element: <Dashboard/>,
+                path: "/dashboard",
+                element: <DashboardLayout/>,
+                errorElement: <Page500/>,
+                children: [
+                    {
+                        index: true,
+                        element: <Dashboard/>,
+                    },
+                    {
+                        path: "products",
+                        element: <Product/>,
+                    }
+                ]
             },
             {
-                path: "hooks",
-                element: <Hook/>,
-            }
+                path: "/login",
+                element: <LoginPage/>,
+            },
         ]
-    },
+    }
+],
     {
-        path: "/login",
-        element: <LoginPage/>,
-    },
-])
+        future: {
+            v7_relativeSplatPath: true,
+            v7_startTransition: true,
+            v7_fetcherPersist: true,
+            v7_normalizeFormMethod: true,
+            v7_partialHydration: true,
+            v7_skipActionErrorRevalidation: true,
+        }
+    }
+)
 
 export default router;

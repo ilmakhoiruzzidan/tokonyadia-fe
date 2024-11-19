@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import {
-    BookOpenIcon,
-    DocumentCheckIcon,
+    ClipboardDocumentListIcon,
     ReceiptPercentIcon,
     Square2StackIcon,
     UserGroupIcon
@@ -45,25 +44,9 @@ function Sidebar({isOpen, onToggle}) {
                             <NavLink
                                 className={({isActive}) => `flex gap-4 items-center py-2 px-4 rounded ${isActive && 'bg-blue-800 text-white'}`}
                                 /*className={({isActive}) => `${&isActive && `bg-primary text-white`}*/
-                                to={"/dashboard/hooks"}>
-                                <DocumentCheckIcon className="size-5"/>
-                                <span>Hooks</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                className={({isActive}) => `flex gap-4 items-center py-2 px-4 rounded ${isActive && 'bg-blue-800 text-white'}`}
-                                to={"/dashboard/trainees"}>
-                                <DocumentCheckIcon className="size-5"/>
-                                <span>Trainees</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                className={({isActive}) => `flex gap-4 items-center py-2 px-4 rounded ${isActive && 'bg-blue-800 text-white'}`}
-                                to={"/dashboard/todos"}>
-                                <DocumentCheckIcon className="size-5"/>
-                                <span>{"Todo"}</span>
+                                to={"/dashboard/products"}>
+                                <ClipboardDocumentListIcon className="size-5"/>
+                                <span>Products</span>
                             </NavLink>
                         </li>
                         <li>
@@ -72,14 +55,6 @@ function Sidebar({isOpen, onToggle}) {
                                 to={"/dashboard/customers"}>
                                 <UserGroupIcon className="size-5"/>
                                 <span>Customers</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                className={({isActive}) => `flex gap-4 items-center py-2 px-4 rounded ${isActive && 'bg-blue-800 text-white'}`}
-                                to={"/dashboard/menus"}>
-                                <BookOpenIcon className="size-5"/>
-                                <span>Menus</span>
                             </NavLink>
                         </li>
                     </div>
