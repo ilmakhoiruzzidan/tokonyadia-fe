@@ -1,12 +1,12 @@
 import {useForm} from 'react-hook-form';
 import {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import {addProduct} from "../../../redux/slices/hookSlices.js";
+import {addProduct} from "../../redux/slices/hookSlices.js";
 import {connect} from "react-redux";
-import {productCategory} from "../../../utils/productCategory.js";
+import {productCategory} from "../../shared/utils/productCategory.js";
 
 
-function Hook(props) {
+function Product(props) {
     const {
         register,
         handleSubmit,
@@ -33,19 +33,6 @@ function Hook(props) {
                 id: `${new Date().getTime()}`,
             })
         }
-
-        // console.log('data on submit', data);
-        // setProducts((prev) => [
-        //     ...prev,
-        //     {
-        //         ...data,
-        //         id: new Date().getTime(),
-        //         name: data.name,
-        //         price: data.price,
-        //         description: data.description,
-        //         category: data.category,
-        //     }
-        // ])
         reset();
     }
 
@@ -98,8 +85,10 @@ function Hook(props) {
                         </label>
                         <label className="flex flex-col" htmlFor="category">
                             <span className="text-gray-700">Category</span>
-                            <select className="p-2 rounded-lg text-sm" name="text"
-                                    id="category" {...register("category", {required: 'category is required!'})}>
+                            <select className="p-2 rounded-lg text-sm"
+                                    name="text"
+                                    id="category"
+                                    {...register("category", {required: 'category is required!'})}>
                                 <option value="">Select Categories</option>
                                 {
                                     productCategory.map((category) => (
@@ -158,9 +147,9 @@ const mapDispatchToProps = {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const HookWithConnect = withConnect(Hook);
+const HookWithConnect = withConnect(Product);
 
-Hook.propTypes = {
+Product.propTypes = {
     selectedProduct: PropTypes.object,
     addProduct: PropTypes.func,
     products: PropTypes.array,
