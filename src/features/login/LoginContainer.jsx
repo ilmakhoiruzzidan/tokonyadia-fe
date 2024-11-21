@@ -6,13 +6,12 @@ import {useNavigate} from "react-router-dom";
 import TextInput from "../../shared/components/TextInput.jsx";
 import {loginSchema} from "./schema/index.js";
 import toast from "react-hot-toast";
-import useAuth from "../../shared/hoc/useAuth.jsx";
+import useAuth from "../../shared/hooks/useAuth.jsx";
 import authService from "../../services/authService.js";
 import {useEffect} from "react";
 
 function LoginContainer() {
     const {accessToken, setAuthentication} = useAuth();
-
 
     const {
         control,
@@ -30,10 +29,12 @@ function LoginContainer() {
 
     const onSubmit = handleSubmit(async (formValues) => {
         try {
-            const {data} = authService.login(formValues);
+            const data  = authService.login(formValues);
             setAuthentication(data);
             toast.success('Successfully logged in!');
+            navigate('/dashboard');
         } catch (e) {
+            console.log(e)
             toast.error(e.response?.data.message);
         }
     });
@@ -74,7 +75,6 @@ function LoginContainer() {
                                     type="password"
                                     error={errors.password}
                                 />
-
                                 <button
                                     disabled={!isValid}
                                     className="disabled:bg-gray-300 mt-4 p-2 bg-blue-800 rounded-lg text-white hover:bg-blue-700 active:bg-blue-800 transition"
