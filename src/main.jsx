@@ -1,4 +1,3 @@
-import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
 import './index.css'
 import store from "./redux/store.js";
@@ -9,17 +8,16 @@ import {Toaster} from "react-hot-toast";
 import {AuthProvider} from "./shared/context/AuthContext.jsx";
 
 createRoot(document.getElementById('root')).render(
-    <StrictMode>
-        <Provider store={store}>
-            <Toaster/>
-            <AuthProvider>
-                <RouterProvider router={router}
-                                future={{
-                                    v7_startTransition: true
-                                }}
-                >
-                </RouterProvider>
-            </AuthProvider>
-        </Provider>
-    </StrictMode>,
+    <Provider store={store}>
+        <Toaster/>
+        <AuthProvider>
+            <RouterProvider
+                router={router}
+                future={{
+                    v7_startTransition: true
+                }}
+            >
+            </RouterProvider>
+        </AuthProvider>
+    </Provider>
 )

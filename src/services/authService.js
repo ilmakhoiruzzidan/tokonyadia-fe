@@ -9,13 +9,10 @@ const authService = {
         return data;
     },
     async logout() {
-        const token = localStorage.getItem("accessToken");
-        if (!token) {
-            throw new Error("Token not found");
-        }
+        const accessToken = localStorage.getItem("accessToken");
         const {data} = await httpClient.post('/api/auth/logout', {}, {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${accessToken}`
             }
         });
         return data;

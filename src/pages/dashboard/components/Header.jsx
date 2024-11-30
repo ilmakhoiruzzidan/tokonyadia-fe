@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
 import Modal from "../../../shared/components/Modal.jsx";
 import {useRef} from "react";
+import {useDispatch} from "react-redux";
+import {logoutAction} from "../../../redux/actions/authAction.js";
 
 Header.propTypes = {
     onToggle: PropTypes.func
@@ -15,6 +17,7 @@ function Header({onToggle}) {
 
     const {clearAuthentication} = useAuth();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const dialogRef = useRef(null);
 
     const handleOpenDialog = () => {
@@ -24,14 +27,14 @@ function Header({onToggle}) {
     }
 
     const handleLogout = async () => {
-        try {
-            await authService.logout();
-            clearAuthentication();
-            toast.success("Logout successfully.");
-            navigate('/login');
-        } catch (e) {
-            toast.error(e.response?.data.message);
-        }
+        dispatch(logoutAction({
+            onSuccess: () => {
+                localStorage.removeItem("accessToken");
+                clearAuthentication();
+                toast.success('Logout Successfully');
+                navigate('/login');
+            }
+        }))
     }
 
     return (

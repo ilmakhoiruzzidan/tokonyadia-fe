@@ -30,6 +30,9 @@ const uiSlice = createSlice({
             state.error = errorMessage || 'Unexpected error occurred';
             toast.error(state.error);
         },
+        retrying: (state) => {
+            state.isRetrying = true; // Tandai bahwa retry sedang berlangsung
+        },
     }
 });
 
@@ -37,6 +40,7 @@ export const {
     loading,
     success,
     error,
+    retrying,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

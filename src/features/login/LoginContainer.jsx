@@ -5,13 +5,14 @@ import {useNavigate} from "react-router-dom";
 
 import TextInput from "../../shared/components/TextInput.jsx";
 import {loginSchema} from "./schema/index.js";
-import toast from "react-hot-toast";
 import useAuth from "../../shared/hooks/useAuth.jsx";
-import authService from "../../services/authService.js";
 import {useEffect} from "react";
+import {loginAction} from "../../redux/actions/authAction.js";
+import {useDispatch} from "react-redux";
 
 function LoginContainer() {
     const {accessToken, setAuthentication} = useAuth();
+    const dispatch = useDispatch();
 
     const {
         control,
@@ -28,15 +29,9 @@ function LoginContainer() {
     const navigate = useNavigate();
 
     const onSubmit = handleSubmit(async (formValues) => {
-        try {
-            const data  = authService.login(formValues);
-            setAuthentication(data);
-            toast.success('Successfully logged in!');
-            navigate('/dashboard');
-        } catch (e) {
-            console.log(e)
-            toast.error(e.response?.data.message);
-        }
+        const {payload: {data}} = await dispatch(loginAction(formValues));
+        setAuthentication(data);
+
     });
 
     useEffect(() => {
