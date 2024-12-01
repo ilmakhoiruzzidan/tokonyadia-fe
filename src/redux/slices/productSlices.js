@@ -6,10 +6,19 @@ const productSlice = createSlice({
     initialState: {
         products: [],
         selectedProduct: null,
+        paging: {
+            totalItems: 0,
+            totalPages: 0,
+            page: 1,
+            size: 10,
+        },
     },
     reducers: {
-        setSelectedProduct(state, {payload}) {
-            state.selectedProduct = payload;
+        setSelectedProduct(state, action) {
+            state.selectedProduct = action.payload;
+            if (action.payload.images && action.payload.images.length >= 0) {
+                state.selectedImage = action.payload.images[0];
+            }
         },
         clearSelectedProduct(state) {
             state.selectedProduct = null;
@@ -18,6 +27,7 @@ const productSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getAllProductsAction.fulfilled, (state, action) => {
             state.products = action.payload.data || [];
+            state.paging = action.payload.paging;
         });
         builder.addCase(getProductByIdAction.fulfilled, (state, action) => {
             state.selectedProduct = action.payload;

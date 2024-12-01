@@ -13,7 +13,7 @@ import BasicSelect from "../../../../shared/components/BasicSelect.jsx";
 import {PlusIcon} from "@heroicons/react/16/solid/index.js";
 import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
 
-const ModalForm = forwardRef(
+const ModalFormCreate = forwardRef(
     ({
          title,
          onConfirm,
@@ -66,7 +66,6 @@ const ModalForm = forwardRef(
                 price: parseRupiahIntoString(formValues.price),
                 images: formValues.images ? formValues.images.flatMap(value => value.image) : null,
             }
-            console.log('Data being sent:', data);
             dispatch(createProductAction({
                 values: data,
                 onSuccess: () => {
@@ -77,7 +76,6 @@ const ModalForm = forwardRef(
 
         return (
             <dialog
-
                 ref={ref}
                 className="modal">
                 <div className="z-60 bg-white rounded-lg modal-box w-full">
@@ -229,8 +227,6 @@ const ModalForm = forwardRef(
                                 </div>
                             </div>
 
-
-
                             <div className="flex gap-4 justify-end">
                                 <Button btnType="secondary" variant="outlined" onClick={onClose}>
                                     Close
@@ -252,9 +248,9 @@ const ModalForm = forwardRef(
     }
 );
 
-ModalForm.displayName = "Modal";
+ModalFormCreate.displayName = "Modal";
 
-ModalForm.propTypes = {
+ModalFormCreate.propTypes = {
     title: PropTypes.string,
     onClose: PropTypes.func,
     onConfirm: PropTypes.func,
@@ -264,4 +260,4 @@ ModalForm.propTypes = {
     confirmBtnText: PropTypes.string,
 }
 
-export default ModalForm;
+export default ModalFormCreate;

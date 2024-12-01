@@ -1,33 +1,78 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {getAllProductsAction} from "../../../redux/actions/productAction.js";
+import {
+    deleteProductAction,
+    deleteSpecifiedImageAction,
+    getAllProductsAction
+} from "../../../redux/actions/productAction.js";
 import {PlusIcon} from "@heroicons/react/16/solid/index.js";
 import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/24/solid/index.js";
 import {parseRupiah} from "../../../shared/utils/currencyUtil.js";
 import {PencilSquareIcon, TrashIcon} from "@heroicons/react/24/outline/index.js";
 import useDialog from "../../../shared/hooks/useDialog.jsx";
-import ModalForm from "./forms/ModalForm.jsx";
+import ModalFormCreate from "./forms/ModalFormCreate.jsx";
 import {getAllCategoriesAction} from "../../../redux/actions/categoryAction.js";
 import {getAllStoresAction} from "../../../redux/actions/storeAction.js";
+import usePagination from "../../../shared/hooks/usePagination.jsx";
+import Modal from "../../../shared/components/Modal.jsx";
+import {setSelectedProduct} from "../../../redux/slices/productSlices.js";
+import ModalFormUpdate from "./forms/ModalFormUpdate.jsx";
 
 function ProductList() {
     const dispatch = useDispatch();
-    const {products} = useSelector((state) => state.products);
+    const {page, size, handleChangePage} = usePagination();
     const {isFetching} = useSelector((state) => (state.ui));
+    const {products, selectedProduct, paging} = useSelector((state) => state.products);
 
-    const {ref: dialogAddRef, handleOpen, handleClose} = useDialog();
+    const {ref: dialogAddRef, handleOpen: handleOpenAdd, handleClose: handleCloseAdd} = useDialog();
+    const {ref: dialogDeleteRef, handleOpen: handleOpenDelete, handleClose: handleCloseDelete} = useDialog();
+    const {ref: dialogUpdateRef, handleOpen: handleOpenUpdate, handleClose: handleCloseUpdate} = useDialog();
 
-    const openProductModal = () => {
-        handleOpen(() => {
+    const openFormCreateModal = () => {
+        handleOpenAdd(() => {
             // Fetch categories only when opening this modal
             dispatch(getAllCategoriesAction());
             dispatch(getAllStoresAction());
         });
     };
 
+    const openFormUpdateModal = (product) => {
+        handleOpenUpdate(() => {
+            // Fetch categories only when opening this modal
+            dispatch(getAllCategoriesAction());
+            dispatch(getAllStoresAction());
+            dispatch(setSelectedProduct(product));
+        });
+    };
+
+    const openDeleteModal = (product) => {
+        dispatch(setSelectedProduct(product));
+        handleOpenDelete();
+    }
+
+    const handleDelete = async () => {
+        try {
+            const imageDeletionPromises = selectedProduct.images.map((image) =>
+                dispatch(deleteSpecifiedImageAction({ imageId: image.id }))
+            );
+
+            await Promise.all(imageDeletionPromises);
+
+            await dispatch(deleteProductAction({
+                id: selectedProduct.id,
+                onSuccess: () => handleCloseDelete(),
+            }));
+        } catch (error) {
+            console.error("Error deleting product or images:", error);
+        }
+    }
+
     useEffect(() => {
-        dispatch(getAllProductsAction())
-    }, [dispatch]);
+        dispatch(getAllProductsAction({
+            page: page,
+            size: size,
+        }))
+    }, [dispatch, page, size]);
 
     if (isFetching) {
         return "Loading...";
@@ -35,20 +80,36 @@ function ProductList() {
 
     return (
         <>
-            <ModalForm
+            <ModalFormCreate
                 ref={dialogAddRef}
                 title={"Add New Product"}
                 hasConfirm
-
-                onClose={handleClose}
+                onClose={handleCloseAdd}
                 confirmBtnText={"Submit"}>
-            </ModalForm>
+            </ModalFormCreate>
+            <ModalFormUpdate
+                ref={dialogUpdateRef}
+                title={"Update Product"}
+                hasConfirm
+                onClose={handleCloseUpdate}
+                confirmBtnText={"Submit"}>
+            </ModalFormUpdate>
+            <Modal
+                ref={dialogDeleteRef}
+                title={"Delete Product"}
+                hasConfirm
+                confirmBtnText={"Delete"}
+                onClose={handleCloseDelete}
+                onConfirm={handleDelete}>
+                <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+            </Modal>
+
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold mb-4">Product Management</h1>
+            <h1 className="text-2xl font-bold mb-4">Product Management</h1>
                 <div className="flex gap-4">
                     <button
                         onClick={() => {
-                            openProductModal()
+                            openFormCreateModal()
                         }}
                         className="bg-blue-800 text-white py-2 px-3 rounded-lg flex gap-4 items-center">
 
@@ -56,13 +117,18 @@ function ProductList() {
                         <span className="text-sm">Add Product</span>
                     </button>
                     <div className="flex gap-4 items-center">
-                        <button>
+                        <button
+                            disabled={page < 1}
+                            onClick={() => handleChangePage(page - 1)}>
                             <ChevronLeftIcon className="size-5"/>
                         </button>
-                        <button>
+                        <button
+                            disabled={products.length < size}
+                            onClick={() => handleChangePage(page + 1)}>
                             <ChevronRightIcon className="size-5"/>
                         </button>
-                        <p className="text-sm text-gray-600">Show {products.length} of {products.length}</p>
+                        <p className="text-sm text-gray-600">Showing {(paging.page - 1) * paging.size + 1} to{" "}
+                            {Math.min(paging.page * paging.size, paging.totalItems)} of {paging.totalItems} results</p>
                     </div>
                 </div>
 
@@ -100,8 +166,11 @@ function ProductList() {
                                     <td className="px-4 py-2 border-b border-gray-300">{product.description}</td>
                                     <td className="px-4 py-2 border-b border-gray-300">
                                         <div className="flex gap-4">
-                                            <PencilSquareIcon className="size-5 text-amber-600"/>
-                                            <button>
+                                            <button onClick={() => openFormUpdateModal(product)}>
+                                                <PencilSquareIcon className="size-5 text-amber-600"/>
+                                            </button>
+
+                                            <button onClick={() => openDeleteModal(product)} >
                                                 <TrashIcon className="size-5 text-red-500"/>
                                             </button>
                                         </div>
@@ -112,7 +181,6 @@ function ProductList() {
                 }
                 </tbody>
             </table>
-
         </>
     );
 }
