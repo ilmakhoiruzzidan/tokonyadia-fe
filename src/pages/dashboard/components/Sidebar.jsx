@@ -6,6 +6,7 @@ import {
     UserGroupIcon
 } from "@heroicons/react/24/outline/index.js";
 import {NavLink} from "react-router-dom";
+import logo from '/src/assets/logo - Edited (1).jpg';
 
 Sidebar.propTypes = {
     isOpen: PropTypes.bool.isRequired,
@@ -25,8 +26,8 @@ function Sidebar({isOpen, onToggle}) {
             <aside
                 className={`fixed w-72 m-4 rounded-xl top-0 h-[calc(100dvh-40px)] bg-white shadow-lg transform ease-in-out duration-300 z-10 ${isOpen ? "translate-x-0" : "-translate-x-96"} overflow-y-auto`}>
                 <div className="flex gap-4 mt-8 px-8">
-                    <img height={48} width={48} className="aspect-square" src="#" alt="logo"/>
-                    <h1 className="text-gray-700 flex items-center font-bold text-2xl">Backoffice</h1>
+                    <img height={48} width={48} className="rounded-lg" src={logo} alt="logo"/>
+                    <h1 className="text-gray-700 flex items-center font-bold text-2xl">Tokonyadia</h1>
                 </div>
                 <ul className="flex flex-col px-8 gap-y-1 overflow-y-auto">
                     <p className="text-xs font-bold text-slate-400 my-4">Main Menu</p>

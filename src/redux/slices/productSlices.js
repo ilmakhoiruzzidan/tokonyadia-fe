@@ -22,7 +22,12 @@ const productSlice = createSlice({
         },
         clearSelectedProduct(state) {
             state.selectedProduct = null;
-        }
+        },
+        updateProductImages(state, action) {
+            if (state.selectedProduct) {
+                state.selectedProduct.images = action.payload;
+            }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getAllProductsAction.fulfilled, (state, action) => {
@@ -30,6 +35,7 @@ const productSlice = createSlice({
             state.paging = action.payload.paging;
         });
         builder.addCase(getProductByIdAction.fulfilled, (state, action) => {
+            console.log('Data fetched from API:', action.payload);
             state.selectedProduct = action.payload;
         });
     }
@@ -37,6 +43,7 @@ const productSlice = createSlice({
 
 export const {
     setSelectedProduct,
-    clearSelectedProduct
+    clearSelectedProduct,
+    updateProductImages
 } = productSlice.actions;
 export default productSlice.reducer;

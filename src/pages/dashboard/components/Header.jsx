@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import {Bars3CenterLeftIcon} from "@heroicons/react/24/outline/index.js";
 import useAuth from "../../../shared/hooks/useAuth.jsx";
-import authService from "../../../services/authService.js";
 import toast from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
 import Modal from "../../../shared/components/Modal.jsx";
 import {useRef} from "react";
 import {useDispatch} from "react-redux";
 import {logoutAction} from "../../../redux/actions/authAction.js";
+import prof from "/src/assets/prof.jpg"
 
 Header.propTypes = {
     onToggle: PropTypes.func
@@ -15,7 +15,7 @@ Header.propTypes = {
 
 function Header({onToggle}) {
 
-    const {clearAuthentication} = useAuth();
+    const {role, clearAuthentication} = useAuth();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const dialogRef = useRef(null);
@@ -57,11 +57,13 @@ function Header({onToggle}) {
                     <div className="dropdown dropdown-end">
                         <div
                             tabIndex={0} role="button"
-                            className="border-base-100 ring-1 ring-gray-500 gap-4 cursor-pointer items-center text-gray-700 w-10 h-10 rounded-full border grid place-items-center font-bold">AW
+                            className="border-base-100 ring-1 ring-pink-500 gap-4 items-center text-gray-700 w-10 h-10 rounded-full border grid place-items-center font-bold">
+                            <img src={prof} width={45} className='rounded-full'  alt="prof" />
                         </div>
                         <ul
                             tabIndex={0}
                             className="dropdown-content menu rounded z-[1] w-52 p-2 shadow mt-4 bg-white">
+                            <li><span className='font-bold'>{role}</span></li>
                             <li className="hover:bg-gray-100 rounded-md"><span>Profile</span></li>
                             <li onClick={handleOpenDialog} className="hover:bg-gray-100 rounded-md"><span>Logout</span></li>
                         </ul>

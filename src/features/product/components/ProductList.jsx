@@ -92,7 +92,7 @@ function ProductList() {
                 title={"Update Product"}
                 hasConfirm
                 onClose={handleCloseUpdate}
-                confirmBtnText={"Submit"}>
+                confirmBtnText={"Update"}>
             </ModalFormUpdate>
             <Modal
                 ref={dialogDeleteRef}

@@ -14,6 +14,7 @@ import {PlusIcon} from "@heroicons/react/16/solid/index.js";
 import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
 import Modal from "../../../../shared/components/Modal.jsx";
 import useDialog from "../../../../shared/hooks/useDialog.jsx";
+import {updateProductImages} from "../../../../redux/slices/productSlices.js";
 
 const ModalFormUpdate = forwardRef(
     ({
@@ -39,11 +40,11 @@ const ModalFormUpdate = forwardRef(
             mode: "all",
             resolver: zodResolver(updateSchema),
             defaultValues: {
-                images: []
+                images: [{image: null}]
             }
         })
         const dispatch = useDispatch();
-        const [previews, setPreviews] = useState([]);
+        const [previews, setPreviews] = useState([null]);
         const [selectedImageId, setSelectedImageId] = useState([]);
         const {ref: dialogDeleteRef, handleOpen} = useDialog();
 
@@ -67,7 +68,7 @@ const ModalFormUpdate = forwardRef(
             } else {
                 setPreviews((prevState) => {
                     const updatedPreviews = [...prevState];
-                    updatedPreviews.splice(index, 1); // Menghapus gambar dan kotak preview
+                    updatedPreviews.splice(index, 1);
                     return updatedPreviews;
                 });
                 remove(index);
@@ -76,15 +77,15 @@ const ModalFormUpdate = forwardRef(
 
 
         const handleFileChange = (index, file) => {
-            const updatedPreviews = [...previews];
-            if (file) {
-                updatedPreviews[index] = URL.createObjectURL(file);
-                setPreviews(updatedPreviews);
-            } else {
-                updatedPreviews[index] = null;
-                setPreviews(updatedPreviews);
-            }
-        }
+            const previewUrl = URL.createObjectURL(file);
+            setPreviews((prev) => {
+                const updatedPreviews = [...prev];
+                updatedPreviews[index] = previewUrl;
+                console.log("Updated previews:", updatedPreviews);
+                return updatedPreviews;
+            });
+        };
+
 
         const onSubmit = handleSubmit(async (formValues) => {
             if (!isValid) return;
@@ -115,25 +116,33 @@ const ModalFormUpdate = forwardRef(
                     category: selectedProduct.category?.id || '',
                     store: selectedProduct.store?.id || '',
                     description: selectedProduct.description || '',
-                    images: selectedProduct.images?.map((img) => ({
-                        id: img.id,
-                        image: img.image || null,
-                        url: img.url || '',
-                    })) || [],
+                    images: selectedProduct.images?.length > 0
+                        ? selectedProduct.images.map((img) => ({
+                            id: img.id,
+                            image: img.image || null,
+                            url: img.url || '',
+                        }))
+                        : [{image: null}],
                 });
-                setPreviews(selectedProduct.images?.map((img) => img.url) || []);
+                setPreviews(
+                    selectedProduct.images?.length > 0
+                        ? selectedProduct.images.map((img) => img.url)
+                        : [null]
+                );
             }
         }, [reset, selectedProduct]);
-
-
-
-
 
         useEffect(() => {
             fetchProductById();
         }, [fetchProductById]);
 
-        console.log(previews)
+        console.log('Render debug:', {
+            fieldsLength: fields.length,
+            previewsLength: previews.length,
+            firstPreview: previews[0]
+        });
+
+
         return (
             <>
                 <Modal
@@ -143,8 +152,10 @@ const ModalFormUpdate = forwardRef(
                         if (selectedImageId) {
                             dispatch(deleteSpecifiedImageAction({
                                 imageId: selectedImageId,
-                                onSuccess: () => {
-                                    fetchProductById();
+                                onSuccess: async () => {
+                                    const updatedImages = selectedProduct.images.filter(image => image.id !== selectedImageId);
+                                    dispatch(updateProductImages(updatedImages));
+                                    await fetchProductById();
                                 }
                             }));
                         }
@@ -256,11 +267,18 @@ const ModalFormUpdate = forwardRef(
                                                         <input
                                                             {...field}
                                                             accept="image/png, image/jpg, image/jpeg, image/webp"
-                                                            hidden
+                                                            className='hidden'
+                                                            onClick={(e) => {
+                                                                console.log(e)
+                                                            }}
                                                             onChange={(e) => {
+
                                                                 const file = e.target.files[0];
                                                                 if (file) {
                                                                     field.onChange(file);
+                                                                    if (index === 0) {
+                                                                        handleFileChange(0, file);
+                                                                    }
                                                                     handleFileChange(index, file);
                                                                 }
                                                             }}
@@ -303,7 +321,9 @@ const ModalFormUpdate = forwardRef(
                                             type="button"
                                             onClick={() => {
                                                 append({image: null});
-                                                setPreviews((prev) => [...prev, null]);
+                                                setPreviews((prev) =>
+                                                     [...prev, null]
+                                                );
                                             }}
                                         >
                                             <PlusIcon className="w-5 h-5"/>
