@@ -37,12 +37,20 @@ function ProductList() {
         });
     };
 
+    const formatProductData = (product) => {
+        return {
+            ...product,
+            price: product.price ? String(product.price) : "",
+            stock: product.stock ? String(product.stock) : "",
+        };
+    };
+
     const openFormUpdateModal = (product) => {
         handleOpenUpdate(() => {
             // Fetch categories only when opening this modal
             dispatch(getAllCategoriesAction());
             dispatch(getAllStoresAction());
-            dispatch(setSelectedProduct(product));
+            dispatch(setSelectedProduct(formatProductData(product)));
         });
     };
 
@@ -161,7 +169,7 @@ function ProductList() {
                     </button>
                     <div className="flex gap-4 items-center">
                         <button
-                            disabled={page < 1}
+                            disabled={page <= 1}
                             onClick={() => handleChangePage(page - 1)}>
                             <ChevronLeftIcon className="size-5"/>
                         </button>
@@ -174,7 +182,6 @@ function ProductList() {
                             {Math.min(paging.page * paging.size, paging.totalItems)} of {paging.totalItems} results</p>
                     </div>
                 </div>
-
             </div>
 
             <table className="mt-4 min-w-full border border-gray-300 rounded-lg overflow-hidden">

@@ -93,11 +93,14 @@ export const deleteSpecifiedImageAction = createActionWithMeta(
 
 export const updateProductAction = createActionWithMeta(
     'products/updateProduct',
-    async ({ values, onSuccess }, thunkAPI) => {
+    async ({ page, size, values, onSuccess }, thunkAPI) => {
         try {
             const response = await productService.update(values);
             toast.success(response.message);
-            thunkAPI.dispatch(getAllProductsAction());
+            thunkAPI.dispatch(getAllProductsAction({
+                page: page,
+                size: size,
+            }));
             onSuccess();
             return response;
         } catch (e) {
