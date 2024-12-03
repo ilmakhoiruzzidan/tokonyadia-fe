@@ -10,35 +10,64 @@ function Dashboard() {
     const {orders} = useSelector((state) => state.orders);
 
     const statusCounts = orders?.reduce((acc, order) => {
-        acc[order.transactionStatus] = (acc[order.transactionStatus] || 0) + 1;
+        if (!acc[order.transactionStatus]) {
+            acc[order.transactionStatus] = 0;
+        }
+        acc[order.transactionStatus] += 1;
         return acc;
     }, {});
 
-    const revenuePerMonth = orders?.reduce((acc, order) => {
-        const month = new Date(order.transactionDate).toLocaleString("default", { month: "long" });
-        const revenue = order.orderDetail.reduce((sum, item) => sum + item.price * item.qty, 0);
-        acc[month] = (acc[month] || 0) + revenue;
+    if (!statusCounts['EXPIRE']) {
+        statusCounts['EXPIRE'] = 0;
+    }
+
+
+    const revenuePerDay = orders?.reduce((acc, order) => {
+        const transactionDate = new Date(order.transactionDate);
+
+        if (isNaN(transactionDate)) {
+            console.warn(`Tanggal tidak valid untuk order ID: ${order.id}`);
+            return acc;
+        }
+
+        const date = transactionDate.toLocaleDateString(); // Mengambil tanggal tanpa bulan atau tahun
+
+        if (!Array.isArray(order.orderDetail)) {
+            console.warn(`Detail pesanan kosong untuk order ID: ${order.id}`);
+            return acc;
+        }
+
+        const revenue = order.orderDetail.reduce((sum, item) => {
+            const price = item.price || 0;
+            const qty = item.qty || 0;
+            return sum + (price * qty);
+        }, 0);
+
+        acc[date] = (acc[date] || 0) + revenue; // Menggunakan tanggal sebagai key
         return acc;
     }, {}) || {};
 
 
     useEffect(() => {
-        dispatch(getAllOrdersAction())
+        dispatch(getAllOrdersAction({
+            size: 100,
+        }))
     }, [dispatch]);
     return (
         <>
             <div className='p-4'>
                 <h1 className='text-2xl font-bold mb-4'>Dashboard</h1>
-                <div className='flex gap-4'>
-                    Chart 1
-                    <OrderStatusChart statusCounts={statusCounts} />
-                </div>
-                <div>
-                    <RevenueChart revenuePerMonth={revenuePerMonth} />
-                    Chart 2
+                <div className='grid grid-cols-2 gap-4'>
+                    <div className='p-4 bg-white rounded shadow'>
+                        <OrderStatusChart statusCounts={statusCounts}/>
+                    </div>
+                    <div className='p-4 bg-white rounded shadow'>
+                        <RevenueChart revenuePerDay={revenuePerDay}/>
+                    </div>
                 </div>
             </div>
         </>
+
     )
 }
 

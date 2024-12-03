@@ -1,26 +1,18 @@
-import {Bar} from "react-chartjs-2";
+import {Pie} from "react-chartjs-2";
 import {
     CategoryScale,
     Chart as ChartJS,
-    Legend,
-    LinearScale,
-    LineElement,
-    PointElement,
-    Title,
+    ArcElement,
     Tooltip,
-    BarElement,
+    Legend,
+    Title,
+    PieController,
 } from 'chart.js';
 import PropTypes from "prop-types";
 
 ChartJS.register(
     CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    BarElement
+    ArcElement, Tooltip, Legend, Title, PieController
 );
 
 OrderStatusChart.propTypes = {
@@ -35,15 +27,16 @@ function OrderStatusChart({ statusCounts }) {
                 label: 'Number of Orders',
                 data: Object.values(statusCounts),
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(69,192,232,0.6)',
+                    'rgba(76,230,76,0.6)',
+                    'rgba(221,81,103,0.7)',
                 ],
                 borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 205, 86, 1)',
+                    'rgba(173, 216, 230, 1)',
+                    'rgba(144, 238, 144, 1)',
+                    'rgba(255, 182, 193, 1)',
                 ],
+
                 borderWidth: 1,
             },
         ],
@@ -57,7 +50,7 @@ function OrderStatusChart({ statusCounts }) {
         },
     };
 
-    return <Bar data={data} options={options} />;
+    return <Pie data={data} options={options} />;
 }
 
 export default OrderStatusChart;

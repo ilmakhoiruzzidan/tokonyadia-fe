@@ -24,19 +24,19 @@ ChartJS.register(
 
 
 RevenueChart.propTypes = {
-    revenuePerMonth: PropTypes.object.isRequired,
+    revenuePerDay: PropTypes.object.isRequired,
 }
 
-function RevenueChart({ revenuePerMonth }) {
-    if (!Object.keys(revenuePerMonth).length) {
+function RevenueChart({ revenuePerDay }) {
+    if (!Object.keys(revenuePerDay).length) {
         return <p>No data available</p>;
     }
     const data = {
-        labels: Object.keys(revenuePerMonth),
+        labels: Object.keys(revenuePerDay),
         datasets: [
             {
                 label: 'Revenue',
-                data: Object.values(revenuePerMonth),
+                data: Object.values(revenuePerDay),
                 fill: false,
                 backgroundColor: 'rgb(75, 192, 192)',
                 borderColor: 'rgba(75, 192, 192, 0.2)',
@@ -48,7 +48,7 @@ function RevenueChart({ revenuePerMonth }) {
         responsive: true,
         plugins: {
             legend: { position: 'top' },
-            title: { display: true, text: 'Monthly Revenue' },
+            title: { display: true, text: 'Daily Revenue' },
         },
         scales: {
             x: {
