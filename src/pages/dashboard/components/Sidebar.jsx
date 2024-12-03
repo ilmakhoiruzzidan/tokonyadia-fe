@@ -45,7 +45,6 @@ function Sidebar({isOpen, onToggle}) {
                         <li>
                             <NavLink
                                 className={({isActive}) => `flex gap-4 items-center py-2 px-4 rounded ${isActive && 'bg-blue-800 text-white'}`}
-                                /*className={({isActive}) => `${&isActive && `bg-primary text-white`}*/
                                 to={"/dashboard/products"}>
                                 <ClipboardDocumentListIcon className="size-5"/>
                                 <span>Products</span>

@@ -64,7 +64,7 @@ function Header({onToggle}) {
                             tabIndex={0}
                             className="dropdown-content menu rounded z-[1] w-52 p-2 shadow mt-4 bg-white">
                             <li><span className='font-bold'>{role}</span></li>
-                            <li className="hover:bg-gray-100 rounded-md">
+                            <li className="hover:bg-pink-100 rounded-md">
                                 <Link
                                 to={'/dashboard/users/me'}
                                 >
@@ -72,7 +72,7 @@ function Header({onToggle}) {
                                 </Link>
 
                             </li>
-                            <li onClick={handleOpenDialog} className="hover:bg-gray-100 rounded-md"><span>Logout</span></li>
+                            <li onClick={handleOpenDialog} className="hover:bg-pink-100 rounded-md"><span>Logout</span></li>
                         </ul>
                     </div>
                 </div>

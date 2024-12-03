@@ -6,6 +6,12 @@ const storeSlices = createSlice({
     initialState: {
         stores: [],
         selectedStore: null,
+        paging: {
+            totalItems: 0,
+            totalPages: 0,
+            page: 1,
+            size: 10,
+        },
     },
     reducers: {
         setSelectedStore(state, {payload}) {
@@ -18,6 +24,7 @@ const storeSlices = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getAllStoresAction.fulfilled, (state, action) => {
             state.stores = action.payload.data || [];
+            state.paging = action.payload.paging;
         });
         builder.addCase(getStoreByIdAction.fulfilled, (state, action) => {
             state.selectedStore = action.payload;
