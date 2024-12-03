@@ -3,8 +3,8 @@ import {
     BuildingStorefrontIcon,
     ClipboardDocumentListIcon,
     ReceiptPercentIcon,
-    Square2StackIcon, Square3Stack3DIcon,
-    UserGroupIcon
+    Square2StackIcon,
+    Square3Stack3DIcon
 } from "@heroicons/react/24/outline/index.js";
 import {NavLink} from "react-router-dom";
 import logo from '/src/assets/logo - Edited (1).jpg';

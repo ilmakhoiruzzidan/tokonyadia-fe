@@ -35,7 +35,6 @@ const productSlice = createSlice({
             state.paging = action.payload.paging;
         });
         builder.addCase(getProductByIdAction.fulfilled, (state, action) => {
-            console.log('Data fetched from API:', action.payload);
             state.selectedProduct = action.payload;
         });
     }

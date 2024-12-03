@@ -6,7 +6,6 @@ import Dashboard from "../pages/dashboard/Dashboard.jsx";
 import Page404 from "../pages/404/Page404.jsx";
 import Page500 from "../pages/500/Page500.jsx";
 import ProductList from "../features/product/components/ProductList.jsx";
-import ProductFormCreate from "../features/product/components/forms/ProductFormCreate.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import Category from "../pages/dashboard/Category.jsx";
 import CategoryList from "../features/category/components/CategoryList.jsx";
@@ -42,10 +41,6 @@ const router = createBrowserRouter([
                         {
                             index: true,
                             element: <ProductList/>,
-                        },
-                        {
-                            path: "create",
-                            element: <ProductFormCreate/>
                         },
                     ]
                 },
