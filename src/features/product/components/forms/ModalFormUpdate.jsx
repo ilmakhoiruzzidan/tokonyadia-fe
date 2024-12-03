@@ -15,6 +15,7 @@ import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
 import Modal from "../../../../shared/components/Modal.jsx";
 import useDialog from "../../../../shared/hooks/useDialog.jsx";
 import {updateProductImages} from "../../../../redux/slices/productSlices.js";
+import usePagination from "../../../../shared/hooks/usePagination.jsx";
 
 const ModalFormUpdate = forwardRef(
     ({
@@ -47,6 +48,7 @@ const ModalFormUpdate = forwardRef(
         const [previews, setPreviews] = useState([null]);
         const [selectedImageId, setSelectedImageId] = useState([]);
         const {ref: dialogDeleteRef, handleOpen} = useDialog();
+        const {page, size} = usePagination();
 
         const {stores} = useSelector(state => state.stores);
         const {isSubmitting} = useSelector(state => state.ui);
@@ -99,6 +101,8 @@ const ModalFormUpdate = forwardRef(
                     : [],
             }
             dispatch(updateProductAction({
+                page: page,
+                size: size,
                 values: data,
                 onSuccess: () => {
                     onClose();
