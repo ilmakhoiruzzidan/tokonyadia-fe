@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter, Navigate} from "react-router-dom";
 import LoginPage from "../pages/login/LoginPage.jsx";
 import Product from "../pages/dashboard/Product.jsx";
 import DashboardLayout from "../pages/dashboard/DashboardLayout.jsx";
@@ -8,6 +8,12 @@ import Page500 from "../pages/500/Page500.jsx";
 import ProductList from "../features/product/components/ProductList.jsx";
 import ProductFormCreate from "../features/product/components/forms/ProductFormCreate.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import Category from "../pages/dashboard/Category.jsx";
+import CategoryList from "../features/category/components/CategoryList.jsx";
+import Profile from "../features/users/components/Profile.jsx";
+import User from "../pages/dashboard/User.jsx";
+import Store from "../pages/dashboard/Store.jsx";
+import StoreList from "../features/store/components/StoreList.jsx";
 
 const router = createBrowserRouter([
         {
@@ -42,7 +48,42 @@ const router = createBrowserRouter([
                             element: <ProductFormCreate/>
                         },
                     ]
-                }
+                },
+                {
+                    path: "categories",
+                    element: <Category/>,
+                    children: [
+                        {
+                            index: true,
+                            element: <CategoryList/>
+                        }
+                    ]
+                },
+                {
+                    path: "users",
+                    element: <User/>,
+                    children: [
+                        {
+                            index: true,
+                            element: <Navigate to='me' replace/>,
+                        },
+                        {
+                            path: "me",
+                            element: <Profile/>
+                        }
+                    ]
+                },
+                {
+                    path: "stores",
+                    element: <Store/>,
+                    children: [
+                        {
+                            index: true,
+                            element: <StoreList/>
+                        }
+                    ]
+                },
+
             ]
         },
         {

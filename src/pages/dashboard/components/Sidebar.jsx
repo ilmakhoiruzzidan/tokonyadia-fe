@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import {
+    BuildingStorefrontIcon,
     ClipboardDocumentListIcon,
     ReceiptPercentIcon,
-    Square2StackIcon,
+    Square2StackIcon, Square3Stack3DIcon,
     UserGroupIcon
 } from "@heroicons/react/24/outline/index.js";
 import {NavLink} from "react-router-dom";
@@ -53,9 +54,17 @@ function Sidebar({isOpen, onToggle}) {
                         <li>
                             <NavLink
                                 className={({isActive}) => `flex gap-4 items-center py-2 px-4 rounded ${isActive && 'bg-blue-800 text-white'}`}
-                                to={"/dashboard/customers"}>
-                                <UserGroupIcon className="size-5"/>
-                                <span>Customers</span>
+                                to={"/dashboard/stores"}>
+                                <BuildingStorefrontIcon className="size-5"/>
+                                <span>Stores</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                className={({isActive}) => `flex gap-4 items-center py-2 px-4 rounded ${isActive && 'bg-blue-800 text-white'}`}
+                                to={"/dashboard/categories"}>
+                                <Square3Stack3DIcon className="size-5"/>
+                                <span>Categories</span>
                             </NavLink>
                         </li>
                     </div>

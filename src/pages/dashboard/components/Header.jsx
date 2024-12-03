@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import {Bars3CenterLeftIcon} from "@heroicons/react/24/outline/index.js";
+import {Bars3Icon} from "@heroicons/react/24/outline/index.js";
 import useAuth from "../../../shared/hooks/useAuth.jsx";
 import toast from "react-hot-toast";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Modal from "../../../shared/components/Modal.jsx";
 import {useRef} from "react";
 import {useDispatch} from "react-redux";
@@ -52,7 +52,7 @@ function Header({onToggle}) {
                     <button
                         className={"p-1 size-10 sm:invisible}"}
                         onClick={() => onToggle()}>
-                        <Bars3CenterLeftIcon/>
+                        <Bars3Icon/>
                     </button>
                     <div className="dropdown dropdown-end">
                         <div
@@ -64,7 +64,14 @@ function Header({onToggle}) {
                             tabIndex={0}
                             className="dropdown-content menu rounded z-[1] w-52 p-2 shadow mt-4 bg-white">
                             <li><span className='font-bold'>{role}</span></li>
-                            <li className="hover:bg-gray-100 rounded-md"><span>Profile</span></li>
+                            <li className="hover:bg-gray-100 rounded-md">
+                                <Link
+                                to={'/dashboard/users/me'}
+                                >
+                                    <span>Profile</span>
+                                </Link>
+
+                            </li>
                             <li onClick={handleOpenDialog} className="hover:bg-gray-100 rounded-md"><span>Logout</span></li>
                         </ul>
                     </div>
