@@ -26,8 +26,7 @@ export const updateSchema = z.object({
     name: z.string({required_error: 'Name is required'}).min(1, 'Name is required'),
     description: z.string({required_error: 'Description is required'}).min(1, 'Description is required'),
     price: z.string({required_error: 'Price is required'})
-        .min(1, 'Price is required')
-        .regex(/^(Rp\. )?\d{1,3}(\.\d{3})*(,\d{2})?$/, 'Invalid format rupiah'),
+        .min(1, 'Price is required'),
     stock: z
         .string({required_error: "Stock is required"})
         .min(1, "Stock must be greater than zero")
