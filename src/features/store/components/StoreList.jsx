@@ -14,11 +14,10 @@ function StoreList() {
             page: page,
             size: size,
         }))
-    }, [dispatch]);
+    }, [page, size, dispatch]);
 
     return (
         <>
-
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold mb-4">Store List</h1>
                 <div className="flex gap-4">
@@ -52,7 +51,7 @@ function StoreList() {
                 {
                     stores && stores.length === 0 ?
                         <tr>
-                            <td className="px-4 py-2 font-bold bg-gray-50 text-center" colSpan={8}>
+                            <td className="px-4 py-2 font-bold bg-gray-50 text-center" colSpan={5}>
                                 No Data
                             </td>
                         </tr> :

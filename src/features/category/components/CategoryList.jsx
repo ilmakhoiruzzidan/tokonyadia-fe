@@ -50,7 +50,7 @@ function CategoryList() {
             page: page,
             size: size,
         }))
-    }, [dispatch]);
+    }, [page, size, dispatch]);
     return (
         <>
             <ModalFormCreateCategory

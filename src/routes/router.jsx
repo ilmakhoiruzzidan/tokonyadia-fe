@@ -13,6 +13,8 @@ import Profile from "../features/users/components/Profile.jsx";
 import User from "../pages/dashboard/User.jsx";
 import Store from "../pages/dashboard/Store.jsx";
 import StoreList from "../features/store/components/StoreList.jsx";
+import Order from "../pages/dashboard/Order.jsx";
+import OrderList from "../features/order/components/OrderList.jsx";
 
 const router = createBrowserRouter([
         {
@@ -82,7 +84,16 @@ const router = createBrowserRouter([
                         }
                     ]
                 },
-
+                {
+                    path: "orders",
+                    element: <Order/>,
+                    children: [
+                        {
+                            index: true,
+                            element: <OrderList/>
+                        }
+                    ]
+                },
             ]
         },
         {
