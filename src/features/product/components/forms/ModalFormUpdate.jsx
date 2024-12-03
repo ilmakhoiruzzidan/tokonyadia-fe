@@ -136,13 +136,6 @@ const ModalFormUpdate = forwardRef(
             fetchProductById();
         }, [fetchProductById]);
 
-        console.log('Render debug:', {
-            fieldsLength: fields.length,
-            previewsLength: previews.length,
-            firstPreview: previews[0]
-        });
-
-
         return (
             <>
                 <Modal

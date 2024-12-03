@@ -12,7 +12,9 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 const router = createBrowserRouter([
         {
             path: '*',
-            element: <Page404/>,
+            element: (
+                <Page404/>
+            ),
         },
         {
             path: "/dashboard",

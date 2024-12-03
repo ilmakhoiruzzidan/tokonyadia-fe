@@ -4,7 +4,7 @@ function usePagination() {
     const [searchParams, setSearchParams] = useSearchParams()
 
     const page = parseInt(searchParams.get('page') || '1');
-    const size = parseInt(searchParams.get('size') || '10');
+    const size = parseInt(searchParams.get('size') || '15');
     const totalItems = parseInt(searchParams.get('totalItems') || '');
 
     const handleChangePage = (page) => {

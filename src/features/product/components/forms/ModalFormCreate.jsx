@@ -12,6 +12,7 @@ import {parseRupiahIntoString} from "../../../../shared/utils/currencyUtil.js";
 import BasicSelect from "../../../../shared/components/BasicSelect.jsx";
 import {PlusIcon} from "@heroicons/react/16/solid/index.js";
 import {XMarkIcon} from "@heroicons/react/24/outline/index.js";
+import usePagination from "../../../../shared/hooks/usePagination.jsx";
 
 const ModalFormCreate = forwardRef(
     ({
@@ -27,6 +28,7 @@ const ModalFormCreate = forwardRef(
         const {
             control,
             handleSubmit,
+            reset,
             formState: {
                 isValid,
                 errors
@@ -40,9 +42,10 @@ const ModalFormCreate = forwardRef(
         })
         const dispatch = useDispatch();
         const [previews, setPreviews] = useState([]);
+        const {page, size} = usePagination();
         const {isSubmitting} = useSelector(state => state.ui);
-        const {categories} = useSelector(state => state.categories);
         const {stores} = useSelector(state => state.stores);
+        const {categories} = useSelector(state => state.categories);
 
         const {fields, append, remove} = useFieldArray({
             control: control,
@@ -67,8 +70,15 @@ const ModalFormCreate = forwardRef(
                 images: formValues.images ? formValues.images.flatMap(value => value.image) : null,
             }
             dispatch(createProductAction({
+                page: page,
+                size: size,
                 values: data,
                 onSuccess: () => {
+                    reset({
+                        images: [{ image: null }],
+                    });
+                    console.log(formValues);
+
                     onClose();
                 }
             }));
@@ -169,7 +179,7 @@ const ModalFormCreate = forwardRef(
                                             control={control}
                                             name={`images.${index}.image`}
                                             defaultValue=""
-                                            render={({ field }) => (
+                                            render={({field}) => (
                                                 <label
                                                     htmlFor={`image.${index}.image`}
                                                     className="border border-dashed rounded-md bg-gray-50 aspect-square w-full flex justify-center items-center duration-300 hover:scale-105 cursor-pointer transition-all overflow-hidden relative"
@@ -204,11 +214,12 @@ const ModalFormCreate = forwardRef(
                                             onClick={() => remove(index)}
                                             className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                                         >
-                                            <XMarkIcon className="w-5 h-5" />
+                                            <XMarkIcon className="w-5 h-5"/>
                                         </button>
 
                                         {errors.images?.[index]?.image && (
-                                            <small className="absolute bottom-0 left-0 right-0 text-red-500 text-xs text-center">
+                                            <small
+                                                className="absolute bottom-0 left-0 right-0 text-red-500 text-xs text-center">
                                                 {errors.images[index].image.message}
                                             </small>
                                         )}
@@ -219,16 +230,20 @@ const ModalFormCreate = forwardRef(
                                     <Button
                                         className="flex items-center gap-2 px-4 py-2 border rounded-md bg-blue-800 text-white hover:bg-blue-900"
                                         type="button"
-                                        onClick={() => append({ image: null })}
+                                        onClick={() => append({image: null})}
                                     >
-                                        <PlusIcon className="w-5 h-5" />
+                                        <PlusIcon className="w-5 h-5"/>
                                         Add Image
                                     </Button>
                                 </div>
                             </div>
 
                             <div className="flex gap-4 justify-end">
-                                <Button btnType="secondary" variant="outlined" onClick={onClose}>
+                                <Button
+                                    type='button'
+                                    btnType="secondary"
+                                    variant="outlined"
+                                    onClick={onClose}>
                                     Close
                                 </Button>
                                 {hasConfirm &&

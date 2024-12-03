@@ -5,11 +5,14 @@ import toast from "react-hot-toast";
 
 export const createProductAction = createActionWithMeta(
     'products/createProduct',
-    async ({values, onSuccess}, thunkAPI) => {
+    async ({page, size, values, onSuccess}, thunkAPI) => {
         try {
             const response = await productService.create(values);
             toast.success(response.message);
-            thunkAPI.dispatch(getAllProductsAction());
+            thunkAPI.dispatch(getAllProductsAction({
+                page: page,
+                size: size,
+            }));
             onSuccess();
             return response;
         } catch (e) {
@@ -21,9 +24,12 @@ export const createProductAction = createActionWithMeta(
 
 export const getAllProductsAction = createActionWithMeta(
     'products/getProducts',
-    async (payload, thunkAPI) => {
+    async ({page, size}, thunkAPI) => {
         try {
-            return await productService.getAll(payload);
+            return await productService.getAll({
+                page: page,
+                size: size,
+            });
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
         }
@@ -54,12 +60,15 @@ export const getProductByIdAction = createActionWithMeta(
 
 export const deleteProductAction = createActionWithMeta(
     'products/deleteProduct',
-    async ({id, onSuccess}, thunkAPI) => {
+    async ({id, page, size, onSuccess}, thunkAPI) => {
         try {
             const response = await productService.deleteById(id);
             onSuccess();
             toast.success(response.message);
-            thunkAPI.dispatch(getAllProductsAction());
+            thunkAPI.dispatch(getAllProductsAction({
+                page: page,
+                size: size,
+            }));
             return response;
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
