@@ -3,6 +3,7 @@ import {useEffect} from "react";
 import {getAllOrdersAction} from "../../redux/actions/orderAction.js";
 import OrderStatusChart from "../../shared/components/OrderStatusChart.jsx";
 import RevenueChart from "../../shared/components/RevenueChart.jsx";
+import ProductBarChart from "../../shared/components/ProductBarChart.jsx";
 
 function Dashboard() {
 
@@ -30,8 +31,7 @@ function Dashboard() {
             return acc;
         }
 
-        const date = transactionDate.toLocaleDateString(); // Mengambil tanggal tanpa bulan atau tahun
-
+        const date = transactionDate.toLocaleDateString();
         if (!Array.isArray(order.orderDetail)) {
             console.warn(`Detail pesanan kosong untuk order ID: ${order.id}`);
             return acc;
@@ -43,7 +43,7 @@ function Dashboard() {
             return sum + (price * qty);
         }, 0);
 
-        acc[date] = (acc[date] || 0) + revenue; // Menggunakan tanggal sebagai key
+        acc[date] = (acc[date] || 0) + revenue;
         return acc;
     }, {}) || {};
 
@@ -63,6 +63,9 @@ function Dashboard() {
                     </div>
                     <div className='p-4 bg-white rounded shadow'>
                         <RevenueChart revenuePerDay={revenuePerDay}/>
+                    </div>
+                    <div className='p-4 bg-white rounded shadow'>
+                        <ProductBarChart/>
                     </div>
                 </div>
             </div>
